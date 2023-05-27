@@ -1,9 +1,9 @@
 [submodule "libcloud"]
 	path = libcloud
-	url = ../../mistio/libcloud.git
+	url = https://github.com/mistio/libcloud.git
 [submodule "paramiko"]
 	path = paramiko
-	url = ../../mistio/paramiko.git
+	url = https://github.com/mistio/paramiko.git
 [submodule "v2"]
 	path = v2
-	url = ../mist-api-v2.git
+	url = https://github.com/mistio/mist-api-v2.git
