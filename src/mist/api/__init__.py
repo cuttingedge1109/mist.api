@@ -530,3 +530,6 @@ def add_routes(configurator):
                            '/api/v1/devops/{project}/jobs/{job}/cancel')
     configurator.add_route('api_v1_devops_job_trace',
                            '/api/v1/devops/{project}/jobs/{job}/trace')
+
+    configurator.add_route('api_v1_devops_token',
+                           '/api/v1/devops/token')

@@ -3412,7 +3412,6 @@ if HAS_BILLING and STRIPE_PUBLIC_APIKEY:
 
 # Devops
 GITLAB_SERVER = os.getenv("GITLAB_SERVER")
-GITLAB_PRIVATE_TOKEN = os.getenv("GITLAB_PRIVATE_TOKEN")
 
 # Read version info
 VERSION = {}
