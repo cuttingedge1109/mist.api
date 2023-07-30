@@ -1,4 +1,3 @@
-from uuid import uuid4
 import mongoengine as me
 
 from mist.api.users.models import User

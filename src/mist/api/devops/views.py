@@ -1,5 +1,3 @@
-from . import gl
-
 import mongoengine as me
 from pyramid.response import Response
 
@@ -8,6 +6,10 @@ from mist.api.helpers import params_from_request, view_config
 from mist.api.devops.methods import get_scm_token
 from mist.api.devops.middleware import check_scm_token_middleware
 from mist.api.devops.models import SCMToken
+import logging
+
+
+log = logging.getLogger(__name__)
 
 OK_RES = Response("OK", 200)
 POST_OK_RES = Response("OK", 201)
@@ -16,7 +18,7 @@ POST_OK_RES = Response("OK", 201)
 ############################################# Token
 TOKEN_FIELD_MISSING_RES = Response("token field is missing", 400)
 @view_config(route_name='api_v1_devops_token',
-             request_method='GET')
+             request_method='GET', renderer='json')
 def get_token(request):
     """
     Tags: tokens
@@ -79,7 +81,8 @@ def update_token(request):
 
 ############################################# Projects
 @view_config(route_name='api_v1_devops_projects', request_method='GET',
-             decorator=check_scm_token_middleware, renderer='json')
+             renderer='json')
+@check_scm_token_middleware
 def list_projects(request):
     """
     Tags: projects
@@ -97,7 +100,8 @@ def list_projects(request):
 
 ############################################# Pipelines
 @view_config(route_name='api_v1_devops_pipelines',request_method='GET',
-             decorator=check_scm_token_middleware, renderer='json')
+             renderer='json')
+@check_scm_token_middleware
 def list_pipelines(request):
     """
     Tags: pipelines
@@ -119,7 +123,8 @@ def list_pipelines(request):
 
 
 @view_config(route_name='api_v1_devops_pipelines', request_method='POST',
-             decorator=check_scm_token_middleware, renderer='json')
+             renderer='json')
+@check_scm_token_middleware
 def trigger_pipeline(request):
     """
     Tags: pipelines
@@ -141,8 +146,8 @@ def trigger_pipeline(request):
 
 
 @view_config(route_name='api_v1_devops_pipeline', request_method='GET',
-             decorator=check_scm_token_middleware, renderer='json')
-
+             renderer='json')
+@check_scm_token_middleware
 def get_pipeline(request):
     """
     Tags: pipelines
@@ -159,7 +164,8 @@ def get_pipeline(request):
 
 
 @view_config(route_name='api_v1_devops_pipeline', request_method='DELETE',
-             decorator=check_scm_token_middleware, renderer='json')
+             renderer='json')
+@check_scm_token_middleware
 def delete_pipeline(request):
     """
     Tags: pipelines
@@ -178,7 +184,8 @@ def delete_pipeline(request):
 
 
 @view_config(route_name='api_v1_devops_pipeline_retry', request_method='POST',
-             decorator=check_scm_token_middleware, renderer='json')
+             renderer='json')
+@check_scm_token_middleware
 def retry_pipeline(request):
     """
     Tags: pipelines
@@ -197,7 +204,8 @@ def retry_pipeline(request):
 
 
 @view_config(route_name='api_v1_devops_pipeline_cancel', request_method='POST',
-             decorator=check_scm_token_middleware, renderer='json')
+             renderer='json')
+@check_scm_token_middleware
 def cancel_pipeline(request):
     """
     Tags: pipelines
@@ -217,7 +225,8 @@ def cancel_pipeline(request):
 
 ############################################# Jobs 
 @view_config(route_name='api_v1_devops_project_jobs', request_method='GET',
-             decorator=check_scm_token_middleware, renderer='json')
+             renderer='json')
+@check_scm_token_middleware
 def list_project_jobs(request):
     """
     Tags: jobs
@@ -237,7 +246,8 @@ def list_project_jobs(request):
 
 
 @view_config(route_name='api_v1_devops_pipeline_jobs', request_method='GET',
-             decorator=check_scm_token_middleware, renderer='json')
+             renderer='json')
+@check_scm_token_middleware
 def list_pipeline_jobs(request):
     """
     Tags: jobs
@@ -259,7 +269,8 @@ def list_pipeline_jobs(request):
 
 
 @view_config(route_name='api_v1_devops_job', request_method='GET',
-             decorator=check_scm_token_middleware, renderer='json')
+             renderer='json')
+@check_scm_token_middleware
 def get_pipeline(request):
     """
     Tags: jobs
@@ -277,7 +288,8 @@ def get_pipeline(request):
 
 
 @view_config(route_name='api_v1_devops_job_erase', request_method='POST',
-             decorator=check_scm_token_middleware, renderer='json')
+             renderer='json')
+@check_scm_token_middleware
 def erase_pipeline(request):
     """
     Tags: jobs
@@ -296,7 +308,8 @@ def erase_pipeline(request):
 
 
 @view_config(route_name='api_v1_devops_job_play', request_method='POST',
-             decorator=check_scm_token_middleware, renderer='json')
+             renderer='json')
+@check_scm_token_middleware
 def play_pipeline(request):
     """
     Tags: jobs
@@ -315,7 +328,8 @@ def play_pipeline(request):
 
 
 @view_config(route_name='api_v1_devops_job_retry', request_method='POST',
-             decorator=check_scm_token_middleware, renderer='json')
+             renderer='json')
+@check_scm_token_middleware
 def retry_pipeline(request):
     """
     Tags: jobs
@@ -334,7 +348,8 @@ def retry_pipeline(request):
 
 
 @view_config(route_name='api_v1_devops_job_cancel', request_method='POST',
-             decorator=check_scm_token_middleware, renderer='json')
+             renderer='json')
+@check_scm_token_middleware
 def cancel_pipeline(request):
     """
     Tags: jobs
@@ -353,7 +368,8 @@ def cancel_pipeline(request):
 
 
 @view_config(route_name='api_v1_devops_job_trace', request_method='POST',
-             decorator=check_scm_token_middleware, renderer='json')
+             renderer='json')
+@check_scm_token_middleware
 def trace_pipeline(request):
     """
     Tags: jobs
@@ -367,3 +383,4 @@ def trace_pipeline(request):
     project = gc.projects.get(project_id, lazy=True)
     job = project.jobs.get(job_id)
     return job.trace()
+

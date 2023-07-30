@@ -9,7 +9,7 @@ from mist.api.exceptions import ForbiddenError, UnauthorizedError
 GITLAB_SDK_DEBUG_MODE = True
 log = logging.getLogger(__name__)
 
-def check_scm_token_middleware(handler, registry):
+def check_scm_token_middleware(handler):
     def middleware(request):
         token = get_scm_token(request)
 
@@ -36,3 +36,4 @@ def check_scm_token_middleware(handler, registry):
         return handler(request)
 
     return middleware
+

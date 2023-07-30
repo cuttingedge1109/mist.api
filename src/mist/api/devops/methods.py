@@ -16,3 +16,4 @@ def get_scm_token(request):
     except me.DoesNotExist:
         return None
     return obj.token
+
