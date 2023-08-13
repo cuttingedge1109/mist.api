@@ -531,5 +531,10 @@ def add_routes(configurator):
     configurator.add_route('api_v1_devops_job_trace',
                            '/api/v1/devops/{project}/jobs/{job}/trace')
 
+    configurator.add_route('api_v1_devops_pipeline_schedules',
+                           '/api/v1/devops/{project}/pipeline_schedules')
+    configurator.add_route('api_v1_devops_pipeline_schedule',
+                           '/api/v1/devops/{project}/pipeline_schedules/{schedule}')
+
     configurator.add_route('api_v1_devops_token',
                            '/api/v1/devops/token')

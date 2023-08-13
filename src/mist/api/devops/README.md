@@ -19,3 +19,18 @@
 |16| POST | /api/v1/devops/{project}/jobs/{job}/retry | - | Retry a specific job|
 |17| POST | /api/v1/devops/{project}/jobs/{job}/cancel | - | Cancel a specific job|
 |18| POST | /api/v1/devops/{project}/jobs/{job}/trace | - | Trace a specific job|
+
+## Example
+```sh
+curl localhost/api/v1/devops/projects -H "Authorization: 1bf68df4f9dccf2134d86a942e040920952dccf4cb0a8f87fd1dc836d0486027"
+curl localhost/api/v1/devops/1/pipelines -H "Authorization: 1bf68df4f9dccf2134d86a942e040920952dccf4cb0a8f87fd1dc836d0486027"
+curl localhost/api/v1/devops/all/pipelines -H "Authorization: 1bf68df4f9dccf2134d86a942e040920952dccf4cb0a8f87fd1dc836d0486027"
+```
+
+## Dev
+
+```py
+import gitlab
+gl = gitlab.Gitlab(url="http://10.23.9.108", private_token="glpat-uMAq-Ykp9vUUMoNtWEYx")
+gl.projects.list()
+```
