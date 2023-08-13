@@ -23,8 +23,12 @@
 ## Example
 ```sh
 curl localhost/api/v1/devops/projects -H "Authorization: 1bf68df4f9dccf2134d86a942e040920952dccf4cb0a8f87fd1dc836d0486027"
-curl localhost/api/v1/devops/1/pipelines -H "Authorization: 1bf68df4f9dccf2134d86a942e040920952dccf4cb0a8f87fd1dc836d0486027"
+
+curl localhost/api/v1/devops/2/pipelines -H "Authorization: 1bf68df4f9dccf2134d86a942e040920952dccf4cb0a8f87fd1dc836d0486027"
 curl localhost/api/v1/devops/all/pipelines -H "Authorization: 1bf68df4f9dccf2134d86a942e040920952dccf4cb0a8f87fd1dc836d0486027"
+
+curl localhost/api/v1/devops/2/pipeline_schedules -H "Authorization: 1bf68df4f9dccf2134d86a942e040920952dccf4cb0a8f87fd1dc836d0486027"
+curl localhost/api/v1/devops/all/pipeline_schedules -H "Authorization: 1bf68df4f9dccf2134d86a942e040920952dccf4cb0a8f87fd1dc836d0486027"
 ```
 
 ## Dev

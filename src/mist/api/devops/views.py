@@ -3,9 +3,17 @@ from pyramid.response import Response
 
 from mist.api.auth.methods import user_from_request
 from mist.api.helpers import params_from_request, view_config
-from mist.api.devops.methods import get_scm_token
-from mist.api.devops.middleware import check_scm_token_middleware, get_project_id_list, get_pipelines, get_jobs, get_pipeline_schedules, get_default_branch
+from mist.api.devops.methods import (
+    get_scm_token,
+    get_project_id_list,
+    get_pipelines,
+    get_jobs,
+    get_pipeline_schedules,
+    get_default_branch,
+)
+from mist.api.devops.middleware import check_scm_token_middleware
 from mist.api.devops.models import SCMToken
+
 # from mist.api.exceptions import PolicyUnauthorizedError
 # from mist.api.exceptions import BadRequestError, KeyParameterMissingError, NotFoundError
 from mist.api.exceptions import RequiredParameterMissingError
