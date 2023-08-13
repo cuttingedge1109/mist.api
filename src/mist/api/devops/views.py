@@ -149,10 +149,13 @@ def trigger_pipeline(request):
 
     gc = request.gitlab_client
     project_id = request.matchdict['project']
-    variables = request.matchdict['variables']
+
+    params = params_from_request(request)
+    variables = params.get('variables', None)
+
     project = gc.projects.get(project_id, lazy=True)
 
-    trigger = project.triggers.create({'description': 'mytrigger'})
+    trigger = project.triggers.create({'description': 'mistio_trigger'})
 
     pipeline = project.trigger_pipeline('main', trigger.token, variables=variables)
     return pipeline.asdict()
