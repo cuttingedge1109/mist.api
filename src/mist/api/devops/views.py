@@ -50,7 +50,7 @@ def create_token(request):
     """
     Tags: tokens
     ---
-    Create a token
+    Create or update the scm token
     """
 
     params = params_from_request(request)
@@ -61,11 +61,17 @@ def create_token(request):
         return Response("token field is missing", 400)
 
     try:
-        # TODO(ce1109): Exception handling for duplicated user
-        SCMToken(user=user, token=token).save()
+        obj = SCMToken.objects.get(user=user)
+        if obj.token == token:
+            return Response("token is same", 200)
+        obj.save()
         return POST_OK_RES
-    except Exception as e:
-        return Response(str(e), 500)
+    except me.DoesNotExist:
+        try:
+            SCMToken(user=user, token=token).save()
+            return POST_OK_RES
+        except Exception as e:
+            return Response(str(e), 500)
 
 
 @view_config(route_name='api_v1_devops_token',
@@ -74,7 +80,7 @@ def update_token(request):
     """
     Tags: tokens
     ---
-    Update a token
+    Update the scm token
     """
 
     params = params_from_request(request)
@@ -149,13 +155,18 @@ def trigger_pipeline(request):
     """
 
     gc = request.gitlab_client
+
     project_id = request.matchdict['project']
-    variables = request.matchdict['variables']
+    params = params_from_request(request)
+    variables = params.get('variables', None)
+
     project = gc.projects.get(project_id, lazy=True)
 
     trigger = project.triggers.create({'description': 'mytrigger'})
 
     pipeline = project.trigger_pipeline('main', trigger.token, variables=variables)
+    # TODO(ce1109): check if need to delete trigger manually
+    # trigger.delete()
     return pipeline.asdict()
 
 
