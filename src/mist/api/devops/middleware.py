@@ -5,9 +5,11 @@ import logging
 from mist.api import config
 from mist.api.devops.methods import get_scm_token
 from mist.api.exceptions import ForbiddenError, UnauthorizedError
+from pyramid.response import Response
 
 GITLAB_SDK_DEBUG_MODE = True
 log = logging.getLogger(__name__)
+SCM_403_RES = Response("SCM token is out of permissions", 403)
 
 def check_scm_token_middleware(handler):
     def middleware(request):
@@ -33,7 +35,15 @@ def check_scm_token_middleware(handler):
         request.gitlab_client = gl
 
         # Call the next handler in the chain
-        return handler(request)
+        try:
+            res = handler(request)
+        except gitlab.exceptions.GitlabHttpError as e:
+            if e.response_code == 403:
+                return SCM_403_RES
+            else:
+                # TODO(ce1109): Distinguish other error codes
+                raise e
+        return res
 
     return middleware
 

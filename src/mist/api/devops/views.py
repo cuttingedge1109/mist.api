@@ -1,3 +1,4 @@
+import gitlab
 import mongoengine as me
 from pyramid.response import Response
 
@@ -149,13 +150,10 @@ def trigger_pipeline(request):
 
     gc = request.gitlab_client
     project_id = request.matchdict['project']
-
-    params = params_from_request(request)
-    variables = params.get('variables', None)
-
+    variables = request.matchdict['variables']
     project = gc.projects.get(project_id, lazy=True)
 
-    trigger = project.triggers.create({'description': 'mistio_trigger'})
+    trigger = project.triggers.create({'description': 'mytrigger'})
 
     pipeline = project.trigger_pipeline('main', trigger.token, variables=variables)
     return pipeline.asdict()
@@ -208,14 +206,12 @@ def retry_pipeline(request):
     ---
     Retry a piepeline
     """
-
     gc = request.gitlab_client
     project_id = request.matchdict['project']
     pipeline_id = request.matchdict['pipeline']
     project = gc.projects.get(project_id, lazy=True)
     pipeline = project.pipelines.get(pipeline_id)
     pipeline.retry()
-
     return OK_RES
 
 
@@ -289,7 +285,7 @@ def list_pipeline_jobs(request):
 @view_config(route_name='api_v1_devops_job', request_method='GET',
              renderer='json')
 @check_scm_token_middleware
-def get_pipeline(request):
+def get_job(request):
     """
     Tags: jobs
     ---
@@ -308,7 +304,7 @@ def get_pipeline(request):
 @view_config(route_name='api_v1_devops_job_erase', request_method='POST',
              renderer='json')
 @check_scm_token_middleware
-def erase_pipeline(request):
+def erase_job(request):
     """
     Tags: jobs
     ---
@@ -328,7 +324,7 @@ def erase_pipeline(request):
 @view_config(route_name='api_v1_devops_job_play', request_method='POST',
              renderer='json')
 @check_scm_token_middleware
-def play_pipeline(request):
+def play_job(request):
     """
     Tags: jobs
     ---
@@ -348,7 +344,7 @@ def play_pipeline(request):
 @view_config(route_name='api_v1_devops_job_retry', request_method='POST',
              renderer='json')
 @check_scm_token_middleware
-def retry_pipeline(request):
+def retry_job(request):
     """
     Tags: jobs
     ---
@@ -368,7 +364,7 @@ def retry_pipeline(request):
 @view_config(route_name='api_v1_devops_job_cancel', request_method='POST',
              renderer='json')
 @check_scm_token_middleware
-def cancel_pipeline(request):
+def cancel_job(request):
     """
     Tags: jobs
     ---
