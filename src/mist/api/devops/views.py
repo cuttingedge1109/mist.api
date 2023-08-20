@@ -27,7 +27,7 @@ log = logging.getLogger(__name__)
 OK_RES = Response("OK", 200)
 POST_OK_RES = Response("OK", 201)
 
-
+GITLAB_SERVER_ERROR_CODE = 503
 ############################################# Token
 TOKEN_FIELD_MISSING_RES = Response("token field is missing", 400)
 @view_config(route_name='api_v1_devops_token',
@@ -50,7 +50,7 @@ def create_token(request):
     """
     Tags: tokens
     ---
-    Create a token
+    Create or update the scm token
     """
 
     params = params_from_request(request)
@@ -61,11 +61,18 @@ def create_token(request):
         return Response("token field is missing", 400)
 
     try:
-        # TODO(ce1109): Exception handling for duplicated user
-        SCMToken(user=user, token=token).save()
+        obj = SCMToken.objects.get(user=user)
+        if obj.token == token:
+            return Response("token is same", 200)
+        obj.token = token
+        obj.save()
         return POST_OK_RES
-    except Exception as e:
-        return Response(str(e), 500)
+    except me.DoesNotExist:
+        try:
+            SCMToken(user=user, token=token).save()
+            return POST_OK_RES
+        except Exception as e:
+            return Response(str(e), 500)
 
 
 @view_config(route_name='api_v1_devops_token',
@@ -74,7 +81,7 @@ def update_token(request):
     """
     Tags: tokens
     ---
-    Update a token
+    Update the scm token
     """
 
     params = params_from_request(request)
@@ -90,6 +97,7 @@ def update_token(request):
         return Response("token doesn't exist", 404)
     if obj.token == token:
         return Response("token is same", 200)
+    obj.token = token
     obj.save()
     return POST_OK_RES
 
@@ -149,13 +157,23 @@ def trigger_pipeline(request):
     """
 
     gc = request.gitlab_client
+
     project_id = request.matchdict['project']
-    variables = request.matchdict['variables']
+    params = params_from_request(request)
+    ref = params.get('ref', get_default_branch(gc, project_id))
+    variables = params.get('variables', None)
+
+    if not ref:
+        raise RequiredParameterMissingError("Target branch or tag is not provided")
+
     project = gc.projects.get(project_id, lazy=True)
-
-    trigger = project.triggers.create({'description': 'mytrigger'})
-
-    pipeline = project.trigger_pipeline('main', trigger.token, variables=variables)
+    trigger = project.triggers.create({'description': 'mist-trigger'})
+    try:
+        pipeline = project.trigger_pipeline(ref, trigger.token, variables=variables)
+    except Exception as e:
+        trigger.delete()
+        return Response(str(e), GITLAB_SERVER_ERROR_CODE)
+    trigger.delete()
     return pipeline.asdict()
 
 
@@ -316,7 +334,7 @@ def erase_job(request):
     job_id = request.matchdict['job']
     project = gc.projects.get(project_id, lazy=True)
     job = project.jobs.get(job_id)
-    job.erasae()
+    job.erase()
 
     return OK_RES
 

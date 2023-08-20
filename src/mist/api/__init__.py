@@ -517,7 +517,7 @@ def add_routes(configurator):
     configurator.add_route('api_v1_devops_project_jobs',
                            '/api/v1/devops/{project}/jobs')
     configurator.add_route('api_v1_devops_pipeline_jobs',
-                           '/api/v1/devops/{project}/jobs/{pipeline}')
+                           '/api/v1/devops/{project}/pipeline_jobs/{pipeline}')
     configurator.add_route('api_v1_devops_job',
                            '/api/v1/devops/{project}/jobs/{job}')
     configurator.add_route('api_v1_devops_job_erase',

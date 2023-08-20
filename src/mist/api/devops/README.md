@@ -12,7 +12,7 @@
 |9| POST    | /api/v1/devops/{project}/pipelines/{pipeline}/retry | - | Retry a pipeline|
 |10| POST   | /api/v1/devops/{project}/pipelines/{pipeline}/cancel | - | Cancel a pipeline|
 |11| Get    | /api/v1/devops/{project}/jobs | - | Get the list of jobs of a specific project|
-|12| Get    | /api/v1/devops/{project}/jobs/{pipeline} | - | Get the list of jobs of a specific pipeline|
+|12| Get    | /api/v1/devops/{project}/pipeline_jobs/{pipeline} | - | Get the list of jobs of a specific pipeline|
 |13| Get    | /api/v1/devops/{project}/jobs/{job} | - | Get a specific job|
 |14| POST   | /api/v1/devops/{project}/jobs/{job}/erase | - | Erase a specific job|
 |15| POST   | /api/v1/devops/{project}/jobs/{job}/play | - | Play a specific job|
@@ -31,7 +31,19 @@
 curl localhost/api/v1/devops/projects -H "Authorization: 1bf68df4f9dccf2134d86a942e040920952dccf4cb0a8f87fd1dc836d0486027"
 
 curl localhost/api/v1/devops/2/pipelines -H "Authorization: 1bf68df4f9dccf2134d86a942e040920952dccf4cb0a8f87fd1dc836d0486027"
+curl localhost/api/v1/devops/2/pipelines/235 -H "Authorization: 1bf68df4f9dccf2134d86a942e040920952dccf4cb0a8f87fd1dc836d0486027"
+
+# Trigger a new pipeline
 curl localhost/api/v1/devops/all/pipelines -H "Authorization: 1bf68df4f9dccf2134d86a942e040920952dccf4cb0a8f87fd1dc836d0486027"
+
+# Retry a pipeline
+curl localhost/api/v1/devops/2/pipelines/237/retry -H "Authorization: 1bf68df4f9dccf2134d86a942e040920952dccf4cb0a8f87fd1dc836d0486027" -X POST
+
+# Cancel a pipeline
+curl localhost/api/v1/devops/2/pipelines/237/cancel -H "Authorization: 1bf68df4f9dccf2134d86a942e040920952dccf4cb0a8f87fd1dc836d0486027" -X POST
+
+# create or update scm token
+curl -X POST localhost/api/v1/devops/token  -H "Authorization: 1bf68df4f9dccf2134d86a942e040920952dccf4cb0a8f87fd1dc836d0486027" -d "{'token': 'glpat-wPQPjbbKe2_1hRLYzd2f'}"
 
 curl localhost/api/v1/devops/2/pipeline_schedules -H "Authorization: 1bf68df4f9dccf2134d86a942e040920952dccf4cb0a8f87fd1dc836d0486027"
 curl localhost/api/v1/devops/all/pipeline_schedules -H "Authorization: 1bf68df4f9dccf2134d86a942e040920952dccf4cb0a8f87fd1dc836d0486027"

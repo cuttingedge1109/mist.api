@@ -77,4 +77,4 @@ def get_default_branch(gc, project_id):
     branches = project.branches.list()
     for br in branches:
         if br.asdict()["default"] == True:
-            return br
+            return br.name

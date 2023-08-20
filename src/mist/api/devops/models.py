@@ -13,3 +13,13 @@ class SCMToken(me.Document):
             'user': self.user.id,
             'token': self.token
         }
+
+    meta = {
+        'collection': 'scmtoken',
+        'indexes': [
+            {
+                'fields': ['user'],
+                'unique': True,
+            }
+        ]
+    }
