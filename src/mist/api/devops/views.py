@@ -18,6 +18,8 @@ from mist.api.devops.models import SCMToken
 # from mist.api.exceptions import PolicyUnauthorizedError
 # from mist.api.exceptions import BadRequestError, KeyParameterMissingError, NotFoundError
 from mist.api.exceptions import RequiredParameterMissingError
+from mist.api.helpers import trigger_session_update
+from mist.api.auth.methods import auth_context_from_request
 
 import logging
 
@@ -211,7 +213,10 @@ def delete_pipeline(request):
     project = gc.projects.get(project_id, lazy=True)
     pipeline = project.pipelines.get(pipeline_id)
     pipeline.delete()
-
+    
+    # trigger sunrise
+    auth_context = auth_context_from_request(request)
+    trigger_session_update(auth_context.owner, ["devops_pipelines"])
     return OK_RES
 
 
@@ -230,6 +235,10 @@ def retry_pipeline(request):
     project = gc.projects.get(project_id, lazy=True)
     pipeline = project.pipelines.get(pipeline_id)
     pipeline.retry()
+    
+    # trigger sunrise
+    auth_context = auth_context_from_request(request)
+    trigger_session_update(auth_context.owner, ["devops_pipelines"])
     return OK_RES
 
 
@@ -249,7 +258,10 @@ def cancel_pipeline(request):
     project = gc.projects.get(project_id, lazy=True)
     pipeline = project.pipelines.get(pipeline_id)
     pipeline.cancel()
-
+    
+    # trigger sunrise
+    auth_context = auth_context_from_request(request)
+    trigger_session_update(auth_context.owner, ["devops_pipelines"])
     return OK_RES
 
 

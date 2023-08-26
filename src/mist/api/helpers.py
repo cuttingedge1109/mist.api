@@ -404,11 +404,11 @@ def amqp_owner_listening(owner, retries=3):
         else:
             return True
 
-
+# devops sunrise
 def trigger_session_update(owner, sections=['clouds', 'keys', 'monitoring',
                                             'scripts', 'templates', 'stacks',
                                             'schedules', 'user', 'org',
-                                            'zones']):
+                                            'zones', 'devops_pipelines']):
     amqp_publish_user(owner, routing_key='update', data=sections)
 
 
