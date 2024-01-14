@@ -16,7 +16,7 @@ RUN ln -s /influxdb-1.8.4-1/influxd /usr/local/bin/influxd && \
 
 # Download VictoriaMetrics promql middleware .so file
 ARG CI_API_V4_URL
-RUN wget -O promql_middleware.so  `curl "${CI_API_V4_URL}/projects/126/releases" | jq -r .[0].assets.links[0].url`
+COPY promql_middleware.so .
 
 RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir --upgrade setuptools && \
