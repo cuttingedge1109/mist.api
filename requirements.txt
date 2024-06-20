@@ -44,6 +44,7 @@ pyramid
 pyramid_chameleon
 pytest
 python3-openid
+python-gitlab
 pyvmomi
 requests
 s3cmd

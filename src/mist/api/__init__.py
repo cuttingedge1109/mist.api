@@ -498,3 +498,43 @@ def add_routes(configurator):
     configurator.add_route('api_v1_dev_add_user_to_team',
                            '/api/v1/dev/orgs/{org_id}/teams/{team_id}')
     configurator.add_route('api_v1_dev_users', '/api/v1/dev/users')
+
+
+
+    # DevOps
+    configurator.add_route('api_v1_devops_projects',
+                           '/api/v1/devops/projects')
+
+    configurator.add_route('api_v1_devops_pipelines',
+                           '/api/v1/devops/{project}/pipelines')
+    configurator.add_route('api_v1_devops_pipeline',
+                           '/api/v1/devops/{project}/pipelines/{pipeline}')
+    configurator.add_route('api_v1_devops_pipeline_retry',
+                           '/api/v1/devops/{project}/pipelines/{pipeline}/retry')
+    configurator.add_route('api_v1_devops_pipeline_cancel',
+                           '/api/v1/devops/{project}/pipelines/{pipeline}/cancel')
+
+    configurator.add_route('api_v1_devops_project_jobs',
+                           '/api/v1/devops/{project}/jobs')
+    configurator.add_route('api_v1_devops_pipeline_jobs',
+                           '/api/v1/devops/{project}/pipeline_jobs/{pipeline}')
+    configurator.add_route('api_v1_devops_job',
+                           '/api/v1/devops/{project}/jobs/{job}')
+    configurator.add_route('api_v1_devops_job_erase',
+                           '/api/v1/devops/{project}/jobs/{job}/erase')
+    configurator.add_route('api_v1_devops_job_play',
+                           '/api/v1/devops/{project}/jobs/{job}/play')
+    configurator.add_route('api_v1_devops_job_retry',
+                           '/api/v1/devops/{project}/jobs/{job}/retry')
+    configurator.add_route('api_v1_devops_job_cancel',
+                           '/api/v1/devops/{project}/jobs/{job}/cancel')
+    configurator.add_route('api_v1_devops_job_trace',
+                           '/api/v1/devops/{project}/jobs/{job}/trace')
+
+    configurator.add_route('api_v1_devops_pipeline_schedules',
+                           '/api/v1/devops/{project}/pipeline_schedules')
+    configurator.add_route('api_v1_devops_pipeline_schedule',
+                           '/api/v1/devops/{project}/pipeline_schedules/{schedule}')
+
+    configurator.add_route('api_v1_devops_token',
+                           '/api/v1/devops/token')

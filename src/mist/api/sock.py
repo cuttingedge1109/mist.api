@@ -313,6 +313,11 @@ class MainConnection(MistConnection):
         self.check_monitoring()
         self.periodic_update_poller()
         self.send_batch_update()
+        # devops sunrise
+        self.list_devops_projects()
+        self.list_devops_pipelines()
+        self.list_devops_jobs()
+        self.list_devops_schedules()
 
     @tornado.gen.coroutine
     def send_batch_update(self):
@@ -504,6 +509,19 @@ class MainConnection(MistConnection):
                             }),
                 )
 
+    # devops by sunrise
+    def list_devops_projects(self):
+        self.internal_request('/api/v1/devops/projects', callback=lambda devops_projects: self.send('list_devops_projects', devops_projects))
+        
+    def list_devops_pipelines(self):
+        self.internal_request('/api/v1/devops/all/pipelines', callback=lambda devops_pipelines: self.send('list_devops_pipelines', devops_pipelines))
+        
+    def list_devops_jobs(self):
+        self.internal_request('/api/v1/devops/all/jobs', callback=lambda devops_jobs: self.send('list_devops_jobs', devops_jobs))
+        
+    def list_devops_schedules(self):
+        self.internal_request('/api/v1/devops/all/pipeline_schedules', callback=lambda devops_schedules: self.send('list_devops_schedules', devops_schedules))
+        
     def update_notifications(self):
         notifications = [ntf.as_dict() for ntf in InAppNotification.objects(
                          owner=self.auth_context.org,
@@ -599,6 +617,10 @@ class MainConnection(MistConnection):
             if 'org' in sections:
                 self.auth_context.org.reload()
                 self.update_org()
+            
+            # devops sunrise
+            if 'devops_pipelines' in sections:
+                self.list_devops_pipelines()
 
         elif routing_key == 'patch_notifications':
             if result.get('user') == self.user.id:
